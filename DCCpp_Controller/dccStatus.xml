@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dccStatus>
+  <serialPort>Emulator</serialPort>
+  <sensorButtons>
+    <Sensor1>false</Sensor1>
+    <Sensor2>false</Sensor2>
+    <Sensor3>false</Sensor3>
+    <Sensor4>false</Sensor4>
+    <Sensor5>false</Sensor5>
+    <Sensor6>false</Sensor6>
+    <Sensor7>true</Sensor7>
+    <Sensor8>false</Sensor8>
+    <Sensor9>false</Sensor9>
+    <Sensor10>true</Sensor10>
+    <Sensor11>false</Sensor11>
+    <Sensor12>false</Sensor12>
+    <Sensor13>false</Sensor13>
+    <Sensor14>true</Sensor14>
+  </sensorButtons>
+  <autoPilot>
+    <Cab2004>FULL</Cab2004>
+    <Cab622>FULL</Cab622>
+    <Cab8601>STOP</Cab8601>
+    <Cab6021>STOP</Cab6021>
+    <Cab54>STOP</Cab54>
+    <Cab1202>FULL</Cab1202>
+    <Cab1506>STOP</Cab1506>
+    <Phase>51</Phase>
+    <TCount>0</TCount>
+    <CrossOver>0</CrossOver>
+    <Program>SINGLE CAB PARK</Program>
+    <CabList>6021</CabList>
+    <Cab2904>STOP</Cab2904>
+  </autoPilot>
+  <cabDefaults>
+    <Cab2004>
+      <throttleDefaults FULL="100" REVERSE="-50" REVERSE_SLOW="-45" SLOW="50" STOP="0"/>
+    </Cab2004>
+    <Cab622>
+      <throttleDefaults FULL="50" REVERSE="-20" REVERSE_SLOW="-16" SLOW="30" STOP="0"/>
+    </Cab622>
+    <Cab8601>
+      <throttleDefaults FULL="77" REVERSE="-34" REVERSE_SLOW="-30" SLOW="46" STOP="0"/>
+    </Cab8601>
+    <Cab6021>
+      <throttleDefaults FULL="55" REVERSE="-25" REVERSE_SLOW="-15" SLOW="25" STOP="0"/>
+    </Cab6021>
+    <Cab54>
+      <throttleDefaults FULL="59" REVERSE="-17" REVERSE_SLOW="-10" SLOW="14" STOP="0"/>
+    </Cab54>
+    <Cab1202>
+      <throttleDefaults FULL="32" REVERSE="-18" REVERSE_SLOW="-15" SLOW="25" STOP="0"/>
+    </Cab1202>
+    <Cab1506>
+      <throttleDefaults FULL="80" REVERSE="-30" REVERSE_SLOW="-27" SLOW="42" STOP="0"/>
+    </Cab1506>
+    <Cab2904>
+      <throttleDefaults FULL="100" REVERSE="-50" REVERSE_SLOW="-45" SLOW="50" STOP="0"/>
+    </Cab2904>
+  </cabDefaults>
+</dccStatus>
