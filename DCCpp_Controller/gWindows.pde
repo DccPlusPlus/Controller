@@ -247,6 +247,11 @@ class ImageWindow extends Window{
       fill(color(200,0,0));
       textFont(messageFont,20);
       text("PLEASE SELECT CAB TO DISPLAY IMAGE",xPos+w/2,yPos+h/2);
+    } else if(throttle.cabButton.cabImage==null){
+      textAlign(CENTER,CENTER);
+      fill(color(200,0,0));
+      textFont(messageFont,20);
+      text("NO IMAGE FILE FOUND FOR THIS CAB",xPos+w/2,yPos+h/2);
     } else{ 
       imageMode(CORNER);
       image(throttle.cabButton.cabImage,xPos,yPos,w,h);
