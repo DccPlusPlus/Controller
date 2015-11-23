@@ -15,7 +15,7 @@ void mouseDragged(){
 //////////////////////////////////////////////////////////////////////////
 
 void mousePressed(){
-    
+      
   if(activeInputBox!=null){
     for(InputBox inputBox : activeInputBox.linkedBoxes)
       inputBox.setIntValue(activeInputBox.getIntValue());
@@ -30,8 +30,11 @@ void mousePressed(){
           msgBoxMain.setMessage("Component Name: "+selectedComponent.componentName,color(30,30,150));
       }
     }
-    else
+    else if(mouseButton==LEFT){
       selectedComponent.pressed();
+    } else {
+      selectedComponent.rightClick();
+    }
   }
     
 }

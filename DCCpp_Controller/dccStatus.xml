@@ -7,7 +7,7 @@
     <Sensor3>false</Sensor3>
     <Sensor4>false</Sensor4>
     <Sensor5>false</Sensor5>
-    <Sensor6>false</Sensor6>
+    <Sensor6>true</Sensor6>
     <Sensor7>true</Sensor7>
     <Sensor8>false</Sensor8>
     <Sensor9>false</Sensor9>
@@ -25,11 +25,11 @@
     <Cab54>STOP</Cab54>
     <Cab1202>FULL</Cab1202>
     <Cab1506>STOP</Cab1506>
-    <Phase>51</Phase>
+    <Phase>42</Phase>
     <TCount>0</TCount>
     <CrossOver>0</CrossOver>
     <Program>SINGLE CAB PARK</Program>
-    <CabList>6021</CabList>
+    <CabList>622</CabList>
     <Cab2904>STOP</Cab2904>
   </autoPilot>
   <cabDefaults>

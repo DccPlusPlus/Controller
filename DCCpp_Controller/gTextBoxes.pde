@@ -93,7 +93,14 @@ class InputBox extends DccComponent{
   Pattern regexp;
   InputType inputType;
   InputBox nextBox=null;
+  CabButton cb=null;
   ArrayList<InputBox> linkedBoxes = new ArrayList<InputBox>();
+  
+  InputBox(CabButton cb){
+    this(cb.editWindow,4,cb.bHeight/2,cb.fontSize,color(255,0,255),color(0,0,0),4,InputType.DEC);
+    this.cb=cb;
+    setIntValue(cb.cab);
+  }
 
   InputBox(int xPos, int yPos, int fontSize, color boxColor, color msgColor, int maxChars, InputType inputType){
     this(null, xPos, yPos, fontSize, boxColor, msgColor, maxChars, inputType);
@@ -218,6 +225,15 @@ class InputBox extends DccComponent{
         activeInputBox=null;
         for( InputBox inputBox : linkedBoxes)
           inputBox.setIntValue(getIntValue());
+        if(cb!=null){
+          cb.cab=getIntValue();
+          cb.bText=str(cb.cab);
+          cb.cabFile=("cab-"+cb.cab+".jpg");
+          cb.cabImage=loadImage(cb.cabFile);        
+          cb.name="Cab"+cb.cab;
+          cabsHM.put(cb.name,cb);    
+          cb.editWindow.close();
+        }
       } else if(k==TAB){
         if(nextBox!=null)
           nextBox.pressed();
@@ -225,6 +241,10 @@ class InputBox extends DccComponent{
           activeInputBox=null;
         for( InputBox inputBox : linkedBoxes)
           inputBox.setIntValue(getIntValue());
+        if(cb!=null){
+          setIntValue(cb.cab);
+          cb.editWindow.close();
+        }
       }
     } // kc!=CODED
   } // keyStroke

@@ -169,6 +169,7 @@ abstract class DccComponent{
   abstract void display();
   void check(){};
   void pressed(){};
+  void rightClick(){};
   void shiftPressed(){};
   void released(){};
   void drag(){};

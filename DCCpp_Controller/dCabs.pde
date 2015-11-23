@@ -206,6 +206,8 @@ class CabButton extends RectButton{
   Throttle throttle;
   PImage cabImage;
   String cabFile;
+  Window editWindow;
+  InputBox cabNumInput;
   
   CabButton(int xPos, int yPos, int bWidth, int bHeight, int baseHue, int fontSize, int cab, Throttle throttle){
     super(null, xPos, yPos, bWidth, bHeight, baseHue, color(0), fontSize, str(cab), ButtonType.NORMAL);
@@ -216,7 +218,10 @@ class CabButton extends RectButton{
     cabFile=("cab-"+cab+".jpg");
     cabImage=loadImage(cabFile);        
     name="Cab"+cab;
-    cabsHM.put(name,this);
+    cabsHM.put(name,this);    
+    colorMode(HSB,255);
+    editWindow = new Window(xPos-(bWidth/2),yPos-(bHeight/2),bWidth,bHeight,color(baseHue,255,255),color(baseHue,255,125));   
+    cabNumInput = new InputBox(this);
     
     speedXML=autoPilotXML.getChild(name);
     if(speedXML==null){
@@ -305,6 +310,12 @@ class CabButton extends RectButton{
 
   void shiftPressed(){
     autoPilot.parkCab(this);
+  }
+  
+//////////////////////////////////////////////////////////////////////////
+
+  void rightClick(){
+    editWindow.open();
   }
   
 //////////////////////////////////////////////////////////////////////////
