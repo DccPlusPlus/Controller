@@ -66,6 +66,15 @@ void serialEvent(Serial p){
  
 //////////////////////////////////////////////////////////////////////////
 
+void clientEvent(Client c){
+  String s;
+  s=c.readStringUntil('>');
+  if(s!=null)
+    receivedString(s);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
   void receivedString(String s){   
     if(s.charAt(0)!='<')
       return;

@@ -22,7 +22,7 @@
   int lastTime;
   PFont throttleFont, messageFont, buttonFont;
   color backgroundColor;
-  XML dccStatusXML, serialPortXML, sensorButtonsXML, autoPilotXML, cabDefaultsXML;
+  XML dccStatusXML, arduinoPortXML, sensorButtonsXML, autoPilotXML, cabDefaultsXML, serverListXML;
   
   DccComponent selectedComponent, previousComponent;
   ArrayList<DccComponent> dccComponents = new ArrayList<DccComponent>();
@@ -36,7 +36,7 @@
   HashMap<String,CabButton> cabsHM = new HashMap<String,CabButton>();
   HashMap<Integer,TrackButton> trackButtonsHM = new HashMap<Integer,TrackButton>();  
   
-  ArduinoSerial     aPort;
+  ArduinoPort     aPort;
   PowerButton       powerButton;
   AutoPilotButton   autoPilot;
   CleaningCarButton cleaningCab;
@@ -84,7 +84,7 @@
     textAlign(CENTER,CENTER);
     backgroundColor=color(50,50,60);
 
-    aPort=new ArduinoSerial();
+    aPort=new ArduinoPort();
     
 // READ, OR CREATE IF NEEDED, XML DCC STATUS FILE
     
@@ -93,10 +93,16 @@
       dccStatusXML=new XML("dccStatus");
     }
 
-    serialPortXML=dccStatusXML.getChild("serialPort");
-    if(serialPortXML==null){
-      serialPortXML=dccStatusXML.addChild("serialPort");
-      serialPortXML.setContent("Emulator");
+    arduinoPortXML=dccStatusXML.getChild("arduinoPort");
+    if(arduinoPortXML==null){
+      arduinoPortXML=dccStatusXML.addChild("arduinoPort");
+      arduinoPortXML.setContent("Emulator");
+    }
+    
+    serverListXML=dccStatusXML.getChild("serverList");
+    if(serverListXML==null){
+      serverListXML=dccStatusXML.addChild("serverList");
+      serverListXML.setContent("127.0.0.1");
     }
     
     sensorButtonsXML=dccStatusXML.getChild("sensorButtons");
@@ -267,7 +273,7 @@
 
 // CREATE TOP-OF-SCREEN MESSAGE BAR AND HELP BUTTON
 
-    msgBoxMain=new MessageBox(width/2,12,width,25,color(200),20,"Searching for Base Station: "+serialPortXML.getContent(),color(30,30,150));
+    msgBoxMain=new MessageBox(width/2,12,width,25,color(200),20,"Searching for Base Station: "+arduinoPortXML.getContent(),color(30,30,150));
     new HelpButton(width-50,12,22,22,150,20,"?");
 
 // CREATE CLOCK

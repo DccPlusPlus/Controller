@@ -79,6 +79,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 import processing.serial.*;
+import processing.net.*; 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.*;
@@ -114,7 +115,7 @@ void draw(){
     return;
     
   if(frameCount==2)    // is this is the second frame, open the serial port --- screen will have already been displayed in prior frame
-    aPort.open(serialPortXML.getContent());
+    aPort.open(arduinoPortXML.getContent());
           
   for(int i=buttonQueue2.size()-1;i>=0;i--){
     buttonQueue2.get(i).init();

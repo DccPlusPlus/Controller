@@ -10,13 +10,13 @@
 //                     ">"        - scroll forward through the list
 //                     "<"        - scroll backwards through the list
 //                     "CONNECT"  - attempt to connect to a DCC++ Base Station
-//                                  at the selected serial port using openPort()
 //
 //                  - the default configuration of DCC++ Controller defines a
 //                    Serial Window that includes all of these components
 //
-//  ArduinoSerial  -  defines the serial port connection to the DCC++ Base Station
-//                 -  extends Processing's normal Serial class by adding
+//  ArduinoPort    -  defines a generic port connection to the DCC++ Base Station
+//                 -  extends Processing's normal Serial class by adding an
+//                    Ethernet or WiFi Client connection at port 2560 as well as 
 //                    a "simulation" function so that DCC++ Controller can be run
 //                    in "emulator" mode without actually establishing a connection
 //                    to the DCC++ Base Station
@@ -29,10 +29,6 @@
 //                    observing the exact commands DCC++ Controller sends to the
 //                    DCC++ Base Station
 //
-//  openPort()     -  (global) method that opens a specified serial connection
-//                    and attempts to ascertain if a DCC++ Base Station is
-//                    present at that port
-
 //////////////////////////////////////////////////////////////////////////
 //  DCC Component: PortScanButton
 //////////////////////////////////////////////////////////////////////////
@@ -55,10 +51,14 @@ class PortScanButton extends RectButton{
 
   void scan(){
     String[] emulator = {"Emulator"};
+    String[] serverList=splitTokens(serverListXML.getContent());
+
     
-    aPort.portList=concat(emulator,Serial.list());
+    aPort.portList=concat(emulator,Serial.list());    
+    aPort.portList=concat(aPort.portList,serverList);
+    
     aPort.displayedPort=0;
-    portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(serialPortXML.getContent())?color(50,150,50):color(50,50,200));
+    portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(arduinoPortXML.getContent())?color(50,150,50):color(50,50,200));
     portNumBox.setMessage("Port "+(aPort.displayedPort+1)+" of "+aPort.portList.length,color(50,50,50));
     
   } // scan
@@ -82,7 +82,7 @@ class PortScanButton extends RectButton{
     
     if(bText==">" && aPort.portList!=null && aPort.portList.length>0){
       aPort.displayedPort=(aPort.displayedPort+1)%aPort.portList.length;
-      portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(serialPortXML.getContent())?color(50,150,50):color(50,50,200));
+      portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(arduinoPortXML.getContent())?color(50,150,50):color(50,50,200));
       portNumBox.setMessage("Port "+(aPort.displayedPort+1)+" of "+aPort.portList.length,color(50,50,50));
       return;
     } // >
@@ -90,17 +90,17 @@ class PortScanButton extends RectButton{
     if(bText=="<" && aPort.portList!=null && aPort.portList.length>0){
       if(--aPort.displayedPort<0)
         aPort.displayedPort=aPort.portList.length-1;
-      portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(serialPortXML.getContent())?color(50,150,50):color(50,50,200));
+      portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(arduinoPortXML.getContent())?color(50,150,50):color(50,50,200));
       portNumBox.setMessage("Port "+(aPort.displayedPort+1)+" of "+aPort.portList.length,color(50,50,50));
       return;
     } // <
     
     if(bText=="CONNECT" && aPort.portList!=null && aPort.portList.length>0){
-      serialPortXML.setContent(aPort.portList[aPort.displayedPort]);
-      portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(serialPortXML.getContent())?color(50,150,50):color(50,50,200));
+      arduinoPortXML.setContent(aPort.portList[aPort.displayedPort]);
+      portBox.setMessage(aPort.portList[aPort.displayedPort],aPort.portList[aPort.displayedPort].equals(arduinoPortXML.getContent())?color(50,150,50):color(50,50,200));
       saveXML(dccStatusXML,STATUS_FILE);
       baseID=null;
-      aPort.open(serialPortXML.getContent());
+      aPort.open(arduinoPortXML.getContent());
       return;
     } // <
 
@@ -109,20 +109,22 @@ class PortScanButton extends RectButton{
 } // PortScanButton Class
 
 //////////////////////////////////////////////////////////////////////////
-//  ArduinoSerial
+//  ArduinoPort
 //////////////////////////////////////////////////////////////////////////
 
-class ArduinoSerial{
+class ArduinoPort{
   Serial port;
+  Client client;
   String[] portList;
   int displayedPort;
   boolean emulate;
   String portName;
   int baud;
   
-  ArduinoSerial(){
+  ArduinoPort(){
     emulate=false;
-    port=null;    
+    port=null;
+    client=null;
   }
 
 //////////////////////////////////////////////////////////////////////////
@@ -134,6 +136,8 @@ class ArduinoSerial{
       simulate(text);
     else if(port!=null)
       port.write(text);
+    else if(client!=null)
+      client.write(text);
       
   } // write
 
@@ -185,18 +189,36 @@ class ArduinoSerial{
   void open(String portName){
     int t;
     this.portName=portName;
+
+    emulate=false;
     
     if(port!=null)
       port.stop();
+      
+    if(client!=null)
+      client.stop();
+
+    int[] n=int(splitTokens(portName,"."));
+
+    if(n.length==4 && n[0]>0 && n[0]<=255 && n[1]>=0 && n[1]<=255 && n[2]>=0 && n[2]<=255 && n[3]>=0 && n[3]<=255){
+      client=new Client(Applet,portName,2560);
+      if(client.ip()==null){
+        msgBoxMain.setMessage("Can't connect to Server: "+portName,color(200,50,0));
+        client=null;
+        return;
+      } else if(client!=null){
+        msgBoxMain.setMessage("Waiting for Base Station at Server: "+client.ip(),color(200,50,0));
+        client.write("<s>");
+        return;
+      }
+    }
     
     if(portName.equals("Emulator")){
       emulate=true;
       msgBoxMain.setMessage("Using Emulator to Simulate Arduino",color(50,50,200));
       return;
     }
-    
-    emulate=false;
-    
+        
     try{
       port=new Serial(Applet,portName,BASE_BAUD);
       port.bufferUntil('>');
@@ -220,6 +242,6 @@ class ArduinoSerial{
               
   } // open()
 
-} // Class ArduinoSerial
+} // Class ArduinoPort
 
 //////////////////////////////////////////////////////////////////////////
