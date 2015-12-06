@@ -87,8 +87,13 @@ class EllipseButton extends DccComponent{
 
   void pressed(){
     
-    if(buttonType==ButtonType.REMOTE){
-      aPort.write("<z"+remoteCode+" "+(isOn?"0>":"1>"));
+    if(buttonType==ButtonType.T_COMMAND){
+      aPort.write("<T"+remoteCode+" "+(isOn?"0>":"1>"));
+      return;
+    }
+
+    if(buttonType==ButtonType.Z_COMMAND){
+      aPort.write("<Z"+remoteCode+" "+(isOn?"0>":"1>"));
       return;
     }
     
@@ -123,8 +128,14 @@ class RectButton extends EllipseButton{
     super(window, xPos, yPos, bWidth, bHeight, baseHue, textColor, fontSize, bText, buttonType);
   }
 
-  RectButton(Window window, int xPos, int yPos, int bWidth, int bHeight, int baseHue, color textColor, int fontSize, String bText, int remoteCode){
-    super(window, xPos, yPos, bWidth, bHeight, baseHue, textColor, fontSize, bText, ButtonType.REMOTE);
+//  RectButton(Window window, int xPos, int yPos, int bWidth, int bHeight, int baseHue, color textColor, int fontSize, String bText, int remoteCode){
+//    super(window, xPos, yPos, bWidth, bHeight, baseHue, textColor, fontSize, bText, ButtonType.REMOTE);
+//    this.remoteCode=remoteCode;
+//    remoteButtonsHM.put(remoteCode,this);    
+//  }
+
+  RectButton(Window window, int xPos, int yPos, int bWidth, int bHeight, int baseHue, color textColor, int fontSize, String bText, ButtonType buttonType, int remoteCode){
+    super(window, xPos, yPos, bWidth, bHeight, baseHue, textColor, fontSize, bText, buttonType);
     this.remoteCode=remoteCode;
     remoteButtonsHM.put(remoteCode,this);    
   } // RectangleButton

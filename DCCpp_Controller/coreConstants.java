@@ -7,7 +7,8 @@ enum ButtonType{
   ONESHOT,
   HOLD,
   REVERSE,
-  REMOTE
+  T_COMMAND,
+  Z_COMMAND
 }
 
 enum InputType{

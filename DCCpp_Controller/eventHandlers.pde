@@ -114,7 +114,7 @@ void clientEvent(Client c){
         }
         break;
         
-      case 'Z':
+      case 'Y':
         int[] h1=int(splitTokens(c));
         if(remoteButtonsHM.get(h1[0])!=null){
           if(h1[1]==1)
@@ -126,9 +126,16 @@ void clientEvent(Client c){
 
       case 'H':
         int[] h=int(splitTokens(c));
+                
         if(trackButtonsHM.get(h[0])!=null){
           trackButtonsHM.get(h[0]).update(h[1]);
+        } else if(remoteButtonsHM.get(h[0])!=null){
+          if(h[1]==1)
+            remoteButtonsHM.get(h[0]).turnOn();
+          else
+            remoteButtonsHM.get(h[0]).turnOff();
         }
+        
         break;
         
       case 'L':

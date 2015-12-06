@@ -36,7 +36,7 @@
   HashMap<String,CabButton> cabsHM = new HashMap<String,CabButton>();
   HashMap<Integer,TrackButton> trackButtonsHM = new HashMap<Integer,TrackButton>();  
   
-  ArduinoPort     aPort;
+  ArduinoPort       aPort;
   PowerButton       powerButton;
   AutoPilotButton   autoPilot;
   CleaningCarButton cleaningCab;
@@ -156,7 +156,7 @@
     progWindow = new Window(500,100,500,400,color(200,180,200),color(50,50,200));
     new DragBar(progWindow,0,0,500,10,color(50,50,200));
     new CloseButton(progWindow,488,0,10,10,color(50,50,200),color(255,255,255));
-    new RectButton(progWindow,250,30,210,30,40,color(0),18,"Programming Track",1);        
+    new RectButton(progWindow,250,30,210,30,40,color(0),18,"Programming Track",ButtonType.T_COMMAND,101);        
     
     new MessageBox(progWindow,20,90,-1,0,color(200,180,200),16,"CV (1-1024):",color(50,50,200));
     new MessageBox(progWindow,20,130,-1,0,color(200,180,200),16,"Value (HEX):",color(50,50,200));
@@ -253,7 +253,7 @@
     new DragBar(extrasWindow,0,0,500,10,color(100,100,200));
     new CloseButton(extrasWindow,488,0,10,10,color(100,100,200),color(255,255,255));
     new MessageBox(extrasWindow,250,20,0,0,color(175),18,"Extra Functions",color(50,50,200));
-    new RectButton(extrasWindow,260,80,120,50,85,color(0),16,"Sound\nEffects",0);        
+//    new RectButton(extrasWindow,260,80,120,50,85,color(0),16,"Sound\nEffects",0);        
 
 // CREATE THE LED LIGHT-STRIP WINDOW:
 
