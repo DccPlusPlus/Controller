@@ -8,6 +8,7 @@ enum ButtonType{
   HOLD,
   REVERSE,
   T_COMMAND,
+  TI_COMMAND,
   Z_COMMAND
 }
 

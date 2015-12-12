@@ -156,7 +156,7 @@
     progWindow = new Window(500,100,500,400,color(200,180,200),color(50,50,200));
     new DragBar(progWindow,0,0,500,10,color(50,50,200));
     new CloseButton(progWindow,488,0,10,10,color(50,50,200),color(255,255,255));
-    new RectButton(progWindow,250,30,210,30,40,color(0),18,"Programming Track",ButtonType.T_COMMAND,101);        
+    new RectButton(progWindow,250,30,210,30,40,color(0),18,"Programming Track",ButtonType.TI_COMMAND,101);        
     
     new MessageBox(progWindow,20,90,-1,0,color(200,180,200),16,"CV (1-1024):",color(50,50,200));
     new MessageBox(progWindow,20,130,-1,0,color(200,180,200),16,"Value (HEX):",color(50,50,200));

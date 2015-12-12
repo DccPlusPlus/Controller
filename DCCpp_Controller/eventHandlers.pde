@@ -130,7 +130,7 @@ void clientEvent(Client c){
         if(trackButtonsHM.get(h[0])!=null){
           trackButtonsHM.get(h[0]).update(h[1]);
         } else if(remoteButtonsHM.get(h[0])!=null){
-          if(h[1]==1)
+          if(h[1]==((remoteButtonsHM.get(h[0]).buttonType==ButtonType.T_COMMAND)?1:0))
             remoteButtonsHM.get(h[0]).turnOn();
           else
             remoteButtonsHM.get(h[0]).turnOff();
