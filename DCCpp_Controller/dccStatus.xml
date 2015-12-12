@@ -58,6 +58,10 @@
       <throttleDefaults FULL="100" REVERSE="-50" REVERSE_SLOW="-45" SLOW="50" STOP="0"/>
     </Cab2904>
   </cabDefaults>
+<<<<<<< Updated upstream
   <arduinoPort>/dev/tty.usbmodem14231</arduinoPort>
+=======
+  <arduinoPort>192.168.1.169</arduinoPort>
+>>>>>>> Stashed changes
   <serverList>127.0.0.1    192.168.1.169</serverList>
 </dccStatus>
