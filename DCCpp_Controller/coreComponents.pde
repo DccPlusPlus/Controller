@@ -54,7 +54,7 @@ class PowerButton extends RectButton{
 //////////////////////////////////////////////////////////////////////////
 
   void shiftPressed(){
-    aPort.write("<2>");
+    aPort.write("<Z 1 0>");
     exit();
   }
   

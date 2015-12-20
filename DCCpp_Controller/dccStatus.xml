@@ -2,10 +2,10 @@
 <dccStatus>
   <serialPort>Emulator</serialPort>
   <sensorButtons>
-    <Sensor1>true</Sensor1>
+    <Sensor1>false</Sensor1>
     <Sensor2>false</Sensor2>
     <Sensor3>true</Sensor3>
-    <Sensor4>true</Sensor4>
+    <Sensor4>false</Sensor4>
     <Sensor5>false</Sensor5>
     <Sensor6>false</Sensor6>
     <Sensor7>true</Sensor7>
@@ -58,6 +58,6 @@
       <throttleDefaults FULL="100" REVERSE="-50" REVERSE_SLOW="-45" SLOW="50" STOP="0"/>
     </Cab2904>
   </cabDefaults>
-  <arduinoPort>Emulator</arduinoPort>
+  <arduinoPort>192.168.1.169</arduinoPort>
   <serverList>192.168.1.169</serverList>
 </dccStatus>
