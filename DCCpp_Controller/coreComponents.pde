@@ -30,6 +30,8 @@
 //                    -  clicking the button toggles the throttle between either 0 or 126 (max speed)
 //                    -  the default configuration of DCC++ Controller defines an
 //                       Extras Window that includes this button
+//
+//  LEDColorButton    -  provide for interactive control of an LED-RGB Light Strip
 
 //////////////////////////////////////////////////////////////////////////
 //  DCC Component: PowerButton
@@ -289,7 +291,7 @@ class LEDColorButton extends DccComponent{
     colorMode(HSB,1.0,1.0,1.0);
     c=color(hue,sat,val);
     colorMode(RGB,255);
-    aPort.write("<S RGB "+int(red(c))+" "+int(green(c))+" "+int(blue(c))+" "+s+">");
+    aPort.write("<G RGB "+int(red(c))+" "+int(green(c))+" "+int(blue(c))+" "+s+">");
     ledHueMsg.setMessage("Hue:   "+int(hue*360),color(200,200,200));
     ledSatMsg.setMessage("Sat:   "+int(sat*100),color(200,200,200));
     ledValMsg.setMessage("Val:   "+int(val*100),color(200,200,200));
