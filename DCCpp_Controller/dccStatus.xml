@@ -4,17 +4,17 @@
   <sensorButtons>
     <Sensor1>false</Sensor1>
     <Sensor2>false</Sensor2>
-    <Sensor3>true</Sensor3>
+    <Sensor3>false</Sensor3>
     <Sensor4>false</Sensor4>
     <Sensor5>false</Sensor5>
     <Sensor6>false</Sensor6>
-    <Sensor7>true</Sensor7>
-    <Sensor8>true</Sensor8>
+    <Sensor7>false</Sensor7>
+    <Sensor8>false</Sensor8>
     <Sensor9>false</Sensor9>
     <Sensor10>false</Sensor10>
     <Sensor11>true</Sensor11>
     <Sensor12>false</Sensor12>
-    <Sensor13>true</Sensor13>
+    <Sensor13>false</Sensor13>
     <Sensor14>false</Sensor14>
   </sensorButtons>
   <autoPilot>
@@ -58,6 +58,6 @@
       <throttleDefaults FULL="100" REVERSE="-50" REVERSE_SLOW="-45" SLOW="50" STOP="0"/>
     </Cab2904>
   </cabDefaults>
-  <arduinoPort>/dev/tty.usbmodem1431</arduinoPort>
-  <serverList>192.168.1.169</serverList>
+  <arduinoPort>Emulator</arduinoPort>
+  <serverList>192.168.1.169 192.168.1.200 185.246.1.229</serverList>
 </dccStatus>

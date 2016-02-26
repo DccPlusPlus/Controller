@@ -369,10 +369,141 @@
     cleaningCab=new CleaningCarButton(extrasWindow,28,80,80,120,50,40,16,"Cleaning\nCar");        
       
 // CREATE MAIN LAYOUT AND DEFINE ALL TRACKS
+
+// Step 1: Define a LAYOUT object that creates a "frame" into which TRACKS be placed
+//
+//  Format is Layout(xCorner, yCorner, frameWidth, layoutWidth, layoutHeight)
+//
+//  xCorner:       the x-coordinate (in pixels) of the upper left corner of the layout frame
+//  yCorner:       the y-coordinate (in pixels) of the upper left corner of the layout frame
+//  frameWidth:    the width of the layout frame (in pixels)
+//  layoutWidth:   the true width of the real layout, in whatever units you want to use (inches, mm, feet, etc)
+//  layoutHeight:  the true height (depth) of the real layout, using the same units as for layoutWidth
+
+// Note that you do no need to specify the height of the frame.  It will be automatically set to scale based on the
+// other parameters.  If the resulting frameHeight is too large or small, decrease or increase the frameWidth.
     
-    layout=new Layout(325,50,1000,80*25.4,36*25.4);
+    Layout myLayout = new Layout( 400, 100, 700, 60, 36 );            // creates a frame with upper left coordinate of (400,100), a width of 700 pixels, and real-world size of 60 inches wide by 36 inches deep
     
-    Track bridgeA = new Track(layout,20,450,62,90);
+// Step 2:  Create the TRACKS
+// 
+//  * You can create either a straight track or a curved track
+//  * You can place the track directly on the layout in an absolute position, or have one end of the track connect to the end of an existing track already on the layout (i.e. a relative position)
+//
+// We will begin by creating a simply oval consisting of two 15" radius semi-circles connected by 24" of straight track.
+//
+//  Format to create a Straight Track with an Absolute Position:    Track(layoutName,x,y,length,angle)
+//  
+//  layoutName:    the name of the previously-created layout on which to place this track
+//  x,y            the x- and y-coordinates (in real units) of one end of the track
+//  length:        the length (in real units) of the track
+//  angle:         the angle (in degrees from 0-360) where 0 degrees=to the right of the screen and 90 degrees=to the top of the screen
+//
+// IMPORTANT: The tracks defined below do not need to exactly match the individual tracks you used on your layout.  For example, you may have used
+//            a single 24" straight track or six 4" straight tracks.  In either case you just need to create a single 24" straight track for the graphic layout,
+//            though there is nothing wrong with creating six separate 4" straight tracks connected together.  For illustration purposes we will create
+//            one 15" track connected to one 9" track to get our 24" run.  We'll see why we used these specific dimensions later below.
+
+  Track trackA = new Track( myLayout, 18, 30, 15, 0 );      // place a straight track named trackA on myLayout with one end at an absolute positon of 18" to the right and 30" down.  Length of track is 15".  Direction is 0 degrees (to the right).
+  
+// Once the first track is down, we can place a second track relative to one of the end points of that first track.  This makes it easy to connect tracks without having to keep track of any absolute position.
+
+//  Format to create a Straight Track with a Relative Position:    Track(trackName,endPoint,length)
+//  
+//  trackName:     the name of the previously-created track already placed on the layout
+//  endPoint:      specifies which endpoint of trackName you want to connect to (0=starting endpoint, 1=ending endpoint)
+//  length:        the length (in real units) of the track
+
+  Track trackB = new Track( trackA, 1, 9 );              // connect a straight track named trackB to the "ending" endpoint of previously-created trackA.  Length of this track is 9"
+  
+// Now that we have our full 24" run, let's create the right-half of the oval, connected to the end of the run.
+
+//  Format to create a Curve Track with a Relative Position:    Track(trackName,endPoint,radius,angle)
+//
+//  trackName:     the name of the previously-created track already placed on the layout
+//  endPoint:      specifies which endpoint of trackName you want to connect to (0=starting endpoint, 1=ending endpoint)
+//  radius:        radius of the curve (in real units)
+//  angle:         arc angle of curve (in degrees, where a positive value indicates counter-clockwise and a negative value indicates clockwise)
+
+  Track trackC = new Track( trackB, 1, 15, 180 );        // connect a counter-clockwise curved track namesd trackC to the "ending" endpoint of previously-created trackB.  Radius is 15" and total arc angle is 180 degrees (i.e. a 30" diameter semi-circle)
+
+// Now let's connect on our straight tracks to the top of the semi-circle.  As before, we'll use two tracks of 15" and 9"
+
+  Track trackD = new Track( trackC, 1, 15 );            // connect a straight track named trackD to the "ending" endpoint of previously-created trackC.  Length of this track is 15"
+  Track trackE = new Track( trackD, 1, 9 );             // connect a straight track named trackE to the "ending" endpoint of previously-created trackD.  Length of this track is 9"
+  
+// Next we need to close the semi-circle with a 15"-radius curved track spanning 180 arc degrees.
+// There are two ways we can do this:
+//  
+//  * We can connect this track to the ending endpoint of the top straight track we just created, and have it curve down to meet the originally-created lower straight track (i.e. it will curve counter-clockwise), OR
+//  * We can connect this track to the starting endpoint of the lower straight track we originally created and have it curve up to meet the just-created top track (i.e. it will curve clockwise).
+//
+// Either of the two tracks below yield exactly the same graphic -- take your pick (though you probably don't need to define both!)
+
+//  Track trackF = new Track( trackE, 1, 15, 180 );         // connect a counter-clockwise curved track named trackF to the ending endpoint previously-created trackE.  Radius is 15" and total arc angle is 180 degrees (i.e. a 30" diameter semi-circle)
+  Track trackF = new Track( trackA, 0, 15, -180 );          // connect a clockwise curved track named trackF to the starting endpoint originaly-created trackA.  Radius is 15" and total arc angle is 180 degrees (i.e. a 30" diameter semi-circle)
+  
+// Viola - we have an oval!
+
+// Step 3:  Add a turnout
+
+// Recall that instead of creating our 24" straight tracks with a single 24" graphic, we used a combination of one 9" track with one 15" track.  This is because each 9" straight track is going to form the straight part of a turnout.
+// We create the turnout by simply "overlaying" a curve track on top of an existing straight track.  In this case, on top of the 9" straight tracks.
+
+// We'll start with the lower 9" straight track.  Note that the it is connected to the right semi-circle named trackC. 
+// That is where we want to begin our turnout - at the beginning endpoint of trackC.
+// We will use a 15" radius curve, but with a much shorter 30 degrees of arc.  Also, the track needs to curve clockwise.
+// Here's how we do it:
+
+  Track trackG = new Track( trackC, 0, 15, -30 );        // connect a clockwise curved track named trackG to the "beginning" endpoint of previously-created trackC.  Radius is 15" and total arc angle is 30 degrees
+
+// Now that we have the graphic in place for the turnout, let's make it operational so that it flips when we click it.
+// We do that with a serial of TrackButton commands.  First we create a new TrackButton object:
+
+// Format to create a new TrackButton object:    TrackButton(width,height,ID)
+//
+//  width:    the width (in pixels) of an invisible button that will be placed on the tracks to create the "clickable" area that flips the turnout
+//  height:   the height (in pixels) of an invisible button that will be placed on the tracks to creates the "clickable" area that flips the turnout
+//  ID:       a unique numerical identifier for this turnout (which will be used by DCC++ BASE STATION)
+
+  TrackButton turnout1 = new TrackButton( 20, 20, 1 );      // create a new TrackButton named turnout1 with a width and height of 20 pixels, and an ID of 1.
+  
+// Next we have to specify that tracks that form the legs of the turnouts.  We do this with the addTrack method.
+//
+// Format to add tracks to a previously-defined TrackButton:  addtrack(trackName,position)
+//
+//  trackName:    the name of a previously-defined track to add as a leg to this track button
+//  position:     defines whether this leg is active (=1) or inactive (=0) when the turnout is "thrown"
+
+  turnout1.addTrack( trackB, 0 );            // add 9" straight-track named trackB to this turnout, and make it inactive when turnout is in thrown position
+  turnout1.addTrack( trackG, 1 );            // add 30-degree curve track named trackG to this turnout, and make it active when turnout is in thrown position
+
+// And that's all you need to do!  If you hover over the center point of this turnout (within a 20x20 pixel area as we specified), the cursor will change to a hand and you will be able to throw and reset the turnout.
+
+// Step 4:  Add siding tracks to the turnout
+
+// Let's extend the turnout into a full siding.  We'll start with a straight track, the a curve, and then a few more straights.
+
+  Track trackH = new Track( trackG, 1, 6 );            // connect a straight track named trackH to the "ending" endpoint of previously-created trackG.  Length of this track is 6"
+  Track trackI = new Track( trackH, 1, 15, 30 );       // connect a counter-clockwise curved track named trackI to the ending endpoint of previously-created trackH.  Radius is 15" and total arc angle is 30 degrees
+  Track trackJ = new Track( trackI, 1, 6 );            // connect a straight track named trackJ to the "ending" endpoint of previously-created trackI.  Length of this track is 6"
+  Track trackK = new Track( trackJ, 1, 3 );            // connect a straight track named trackJ to the "ending" endpoint of previously-created trackI.  Length of this track is 3"
+  
+// Why bother creating two separate straight tracks of 6" and 3" at the end of the siding instead of just one 9" straight track?  So we can add a siding route button near the end of the track
+
+
+  
+
+
+
+
+
+
+
+
+
+/* 
+Track bridgeA = new Track(layout,20,450,62,90);
     Track bridgeB = new Track(bridgeA,1,348,-90);
     Track bridgeC = new Track(bridgeB,1,399);
     Track t5A = new Track(bridgeC,1,126);
@@ -1033,7 +1164,8 @@
     cab8601.setSidingDefaults(rButton4,11,12);
     cab1202.setSidingDefaults(rButton5,11,13);
     cab2004.setSidingDefaults(rButton7,5,14);
-    
+*/
+
   } // Initialize
 
 //////////////////////////////////////////////////////////////////////////
