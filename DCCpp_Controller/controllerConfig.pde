@@ -367,6 +367,8 @@
 
     autoPilot=new AutoPilotButton(325,550,100,50,30,18,"AUTO\nPILOT");
     cleaningCab=new CleaningCarButton(extrasWindow,28,80,80,120,50,40,16,"Cleaning\nCar");        
+
+////// BEGINNING OF SAMPLE LAYOUT ////////      
       
 // CREATE MAIN LAYOUT AND DEFINE ALL TRACKS
 
@@ -429,8 +431,8 @@
 
 // Now let's connect on our straight tracks to the top of the semi-circle.  As before, we'll use two tracks of 15" and 9"
 
-  Track trackD = new Track( trackC, 1, 15 );            // connect a straight track named trackD to the "ending" endpoint of previously-created trackC.  Length of this track is 15"
-  Track trackE = new Track( trackD, 1, 9 );             // connect a straight track named trackE to the "ending" endpoint of previously-created trackD.  Length of this track is 9"
+  Track trackD = new Track( trackC, 1, 9 );            // connect a straight track named trackD to the "ending" endpoint of previously-created trackC.  Length of this track is 9"
+  Track trackE = new Track( trackD, 1, 15 );           // connect a straight track named trackE to the "ending" endpoint of previously-created trackD.  Length of this track is 15"
   
 // Next we need to close the semi-circle with a 15"-radius curved track spanning 180 arc degrees.
 // There are two ways we can do this:
@@ -470,7 +472,7 @@
   
 // Next we have to specify that tracks that form the legs of the turnouts.  We do this with the addTrack method.
 //
-// Format to add tracks to a previously-defined TrackButton:  addtrack(trackName,position)
+// Format to add tracks to a previously-defined TrackButton:  addTrack(trackName,position)
 //
 //  trackName:    the name of a previously-defined track to add as a leg to this track button
 //  position:     defines whether this leg is active (=1) or inactive (=0) when the turnout is "thrown"
@@ -482,14 +484,89 @@
 
 // Step 4:  Add siding tracks to the turnout
 
-// Let's extend the turnout into a full siding.  We'll start with a straight track, the a curve, and then a few more straights.
+// Let's extend the turnout into a full siding.  We'll start with a straight track, the a curve, and then another straights.
 
   Track trackH = new Track( trackG, 1, 6 );            // connect a straight track named trackH to the "ending" endpoint of previously-created trackG.  Length of this track is 6"
   Track trackI = new Track( trackH, 1, 15, 30 );       // connect a counter-clockwise curved track named trackI to the ending endpoint of previously-created trackH.  Radius is 15" and total arc angle is 30 degrees
-  Track trackJ = new Track( trackI, 1, 6 );            // connect a straight track named trackJ to the "ending" endpoint of previously-created trackI.  Length of this track is 6"
-  Track trackK = new Track( trackJ, 1, 3 );            // connect a straight track named trackJ to the "ending" endpoint of previously-created trackI.  Length of this track is 3"
+  Track trackJ = new Track( trackI, 1, 9 );            // connect a straight track named trackJ to the "ending" endpoint of previously-created trackI.  Length of this track is 9"
   
-// Why bother creating two separate straight tracks of 6" and 3" at the end of the siding instead of just one 9" straight track?  So we can add a siding route button near the end of the track
+// Step 5:  Add a route button to the siding  
+  
+// As an option, we can add a siding route button to this siding.
+// Siding route buttons are simply route buttons that are placed on a track.
+// They are not labeled since their location on the track makes it obvious what they do.
+
+// Format to add a Siding RouteButton object:  RouteButton(trackName,width,height)
+//
+//  trackName:    the name of a previously-defined track, in the middle of which this siding button will be placed
+//  width:        the width (in pixels) of the siding button
+//  height:       the height (in pixels) of the siding button
+
+  RouteButton sidingButton1 = new RouteButton( trackJ, 20, 20 );        // create a siding button named sidingButton1 in the middle of trackJ.  The button is 20x20 pixels is size.
+  
+// Once the button is created, we now need to define which turnouts it should operate.  We do this with the addTrackButton method:
+//
+// Format to add turnouts to a previously-defined RouteButton:  addTrackButton(trackButtonName,position)
+//
+//  trackButtonName:    the name of a previously-defined TrackButton (i.e. a turnout) to add to this RouteButton
+//  position:           defines whether this turnout is thrown (=1) or not thrown (=0) when the RouteButton is pressed
+
+  sidingButton1.addTrackButton( turnout1, 1 );      // cause turnout1 to be thrown when sidingButton1 is pressed
+  
+// And that's all you need to do to create a siding button.  You can now operate the turnout either directly, or with the siding button.
+// Note that the siding button only operates the turnout in one direction, and it turns bright green when the siding is activated.
+// If you change the direction of the turnout directly, the siding button will become dim again, indicating the siding is not active.
+
+// Step 6:  Putting it all togther:  Create a spur off of the top straight track that connects to two different sidings.  Add siding RouteButtons to each.
+
+  Track track01 = new Track( trackE, 0, 15, -30 );          // overlay a curve track named track01 connected to the beginning endpoint of trackE (the straight track at the top of the layout)
+  TrackButton turnout2 = new TrackButton( 20, 20, 2 );      // create a new TrackButton named turnout2 with a width and height of 20 pixels, and an ID of 2.
+  turnout2.addTrack( trackD, 0 );                           // add the straight track to this turnout, set for un-thrown
+  turnout2.addTrack( track01, 1 );                          // add the curve track to this turnout, set for thrown
+  
+  Track track02 = new Track( track01, 1, 6 );               // add a straight track named track02 connected to the end of curve track01
+  Track track03 = new Track ( track02, 1, 15, -60 );        // add a curve track named track03 connected to the end of straight track02
+  Track track10 = new Track( track03, 1, 3 );               // add a straight track named track10 connected to the end of straight track03 --- this is the end of the first siding
+  
+  Track track04 = new Track( track01, 1, 15, -30 );         // overlay a curve track named track04 connected to the ending endpoint of track01
+  Track track05 = new Track( track04, 1, 15, -30 );         // connect a second curve track named track0
+  Track track06 = new Track( track05, 1, 3 );               // connect a small straight track to the end of this curve
+  Track track07 = new Track( track06, 1, 3 );               // connect a second straight track --- this is the end of the second siding
+
+  TrackButton turnout3 = new TrackButton( 20, 20, 3 );      // create a new TrackButton named turnout3 with a width and height of 20 pixels, and an ID of 3.
+  turnout3.addTrack( track02, 0 );                          // add the straight track to this turnout, set for un-thrown
+  turnout3.addTrack( track04, 1 );                          // add the curve track to this turnout, set for thrown
+  
+  RouteButton sidingButton2 = new RouteButton( track10, 20, 20 );        // create a siding button named sidingButton2 in the middle of track03.
+  sidingButton2.addTrackButton( turnout2, 1 );                           // cause turnout2 to be thrown when sidingButton2 is pressed
+  sidingButton2.addTrackButton( turnout3, 0 );                           // cause turnout3 to be un-thrown when sidingButton2 is pressed
+
+  RouteButton sidingButton3 = new RouteButton( track07, 20, 20 );        // create a siding button named sidingButton3 in the middle of track07.
+  sidingButton3.addTrackButton( turnout2, 1 );                           // cause turnout2 to be thrown when sidingButton2 is pressed
+  sidingButton3.addTrackButton( turnout3, 1 );                           // cause turnout3 to be thrown when sidingButton2 is pressed
+
+// Step 7:  How about adding a Standalone RouteButton so that with one click we can set all the turnouts to be aligned with the main oval
+
+// Format to create a Standalone RouteButton:  RouteButton(x,y,width,height,label)
+//
+//  x,y:     the x- and y-coordinate (in pixels) of the center of the RouteButton
+//  width:   the width (in pixels) of the RouteButton
+//  height:  the height (in pixels) of the RouteButton
+//  label:   a descriptive label for the RouteButton
+
+  RouteButton setOvalButton = new RouteButton( 600, 500, 70, 30, "Set Oval" );        // create a standalone route button named "Set Oval" at (x,y)=(600,500).  Width=70 pixels, Height=30 pixels
+
+// Turnouts are add to standalone RouteButtons in the exact same way as for siding RouteButtons
+
+  setOvalButton.addTrackButton( turnout1, 0 );            // cause turnout1 to be un-thrown when setOvalButton is pressed
+  setOvalButton.addTrackButton( turnout2, 0 );            // cause turnout2 to be un-thrown when setOvalButton is pressed
+  
+// Note how this standalone siding button is lit only when all of the turnouts are set in the required directions
+
+////// END OF SAMPLE LAYOUT ////////
+
+
+
 
 
   
